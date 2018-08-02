@@ -10,17 +10,14 @@ var apiversion = "0";
 
 var zabbix = new Zabbix('http://10.82.252.68/api_jsonrpc.php','Admin', 'JetZabbixAdmin');
 
-zabbix.getApiVersion(function (err, resp, body) {
-  if (!err) {
-    console.log("Unauthenticated API version request, and the version is: " + body.result)
-    var apiversion = (body.result);
-  }
-});
 zabbix.login(function (err, resp, body) {
   if (!err) {
     console.log("Authenticated! AuthID is: " + zabbix.authid);
   }
-
+  zabbix.getApiVersion(function (err, resp, body) {
+    console.log("Zabbix API version is: " + body.result);
+    var apiversion = (body.result);
+  });
   zabbix.call("template.get",
     {
     "search" : {"host" : "JET Linux"},
