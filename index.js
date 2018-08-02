@@ -30,8 +30,11 @@ zabbix.login(function (err, resp, body) {
     ,function (err, resp, body) {
       if (!err) {
         rawdata = (body.result[0]);
+        rawdata2 = JSON.stringify(rawdata);
+        fs.writeFile('out.json', rawdata2, function(err) {
+          if (err) console.log(err);
+        });
         data = toXML(rawdata);
-        console.log(data);
         var output =
         '<?xml version="1.0" encoding="UTF-8"?>'+
         '<zabbix_export>'+
