@@ -1,3 +1,4 @@
+var argv = require ('yargs').argv;
 var Zabbix = require ('zabbix');
 var xlsx = require ('node-xlsx').default;
 var json2array = require("json2array");
@@ -7,20 +8,25 @@ var fs = require ('fs');
 const { toXML } = require('jstoxml');
 var convert = require ('xml-js');
 var apiversion = "0";
+var job = argv._[0];
+var hostname = '"' + argv._[1] + ' ' + argv._[2] + '"';
+console.log(hostname);
 
 var zabbix = new Zabbix('http://10.82.252.68/api_jsonrpc.php','Admin', 'JetZabbixAdmin');
+
+zabbix.getApiVersion(function (err, resp, version)
+{
+  console.log ("Zabbix api version is " + version.result);
+  apiversion = (version.result);
+});
 
 zabbix.login(function (err, resp, body) {
   if (!err) {
     console.log("Authenticated! AuthID is: " + zabbix.authid);
   }
-  zabbix.getApiVersion(function (err, resp, body) {
-    console.log("Zabbix API version is: " + body.result);
-    var apiversion = (body.result);
-  });
   zabbix.call("template.get",
     {
-    "search" : {"host" : "JET Linux"},
+    "search" : {"host" : hostname},
     "output" : "extend",
     "selectItems" : "extend"
     }
@@ -43,6 +49,9 @@ zabbix.login(function (err, resp, body) {
         fs.writeFile('out.xml', output, function(err) {
         if (err) console.log(err);
         });
+      }
+      if (err) {
+        console.log (err);
       }
     });
   });
