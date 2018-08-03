@@ -1,0 +1,11 @@
+{
+  "name": "zabbix-export",
+  "version": "0.1",
+  "description": "Export and import zabbix templates via zabbix api",
+  "main": "index.js",
+  "author": "Vasilii Nikitchenko",
+  "license": "MIT",
+  "dependencies": {
+    "yargs": "^12.0.1"
+  }
+}
