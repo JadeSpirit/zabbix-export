@@ -7,8 +7,8 @@ var writeFileSync = require ('jest-serializer');
 var fs = require ('fs');
 const { toXML } = require('jstoxml');
 var convert = require ('xml-js');
+
 var apiversion = "0";
-var job = argv.job
 var gettemplate = {
 "search" : {"host" : argv.template},
 "output" : "extend",
@@ -22,14 +22,12 @@ if (hostname = "undefined"){
 };
 console.log(zabbix);
 console.log(gettemplate);
-console.log(job);
 var zabbix = new Zabbix('http://'+hostname+'/api_jsonrpc.php','Admin', 'JetZabbixAdmin');
 zabbix.getApiVersion(function (err, resp, version)
 {
   console.log ("Zabbix api version is " + version.result);
   apiversion = (version.result);
 });
-if (job = "download"){
 zabbix.login(function (err, resp, body) {
   if (!err) {
     console.log("Authenticated! AuthID is: " + zabbix.authid);
@@ -57,12 +55,3 @@ zabbix.login(function (err, resp, body) {
       }
     });
   });
-}
-if (job = "upload"){
-  zabbix.login(function (err, resp, body) {
-    if (!err) {
-      console.log("Authenticated! AuthID is: " + zabbix.authid);
-    }
-  console.log("WIP");
-});
-};
