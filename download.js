@@ -12,18 +12,17 @@ var template = argv.template;
 var format = argv.format;
 
 var gettemplate = {
-  "options" : {
-    "hosts" : [
+  "output": "extend",
+  "filter": {
+    "host": [
       template
     ]
   },
-  "format": format
 };
 
 var zabbix = new Zabbix('http://' + argv.hostname + '/api_jsonrpc.php', argv.username, argv.password);
 
 console.log("Auth string is " + JSON.stringify(zabbix));
-console.log("Aquiring template using " + JSON.stringify(gettemplate));
 
 zabbix.getApiVersion(function (err, resp, version) {
   if (!err) {
@@ -38,7 +37,28 @@ zabbix.login(function (err, resp, body) {
   if (!err) {
     console.log("Authenticated! AuthID is: " + zabbix.authid);
   }
-  zabbix.call("configuration.export", gettemplate, function (err, resp, body) {
+
+  zabbix.call("template.get", gettemplate, function (err, resp, body) {
+    if (!err) {
+      console.log (body.result[0]);
+    }
+    if (err) {
+      console.log (err);
+    }
+});
+
+  var getdata = {
+    "options" : {
+      "templates" : [
+        "10170"
+      ]
+    },
+    "format": format
+  };
+
+  console.log("Aquiring template using " + JSON.stringify(gettemplate) + JSON.stringify(getdata));
+
+  zabbix.call("configuration.export", getdata, function (err, resp, body) {
     if (!err) {
       console.log (body.result);
       data = (body.result);
