@@ -53,7 +53,7 @@ zabbix.login(function (err, resp, body) {
         zabbix.call("configuration.export", getdata, function (err, resp, body) {
           if (!err) {
             data = (body.result);
-            fs.writeFile(template + '.'+ format, data, function (err) {
+            fs.writeFile(template + '.'+ format, data, 'utf8', function (err) {
               if (err) console.log(err);
             });
           }
