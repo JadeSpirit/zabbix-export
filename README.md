@@ -11,7 +11,8 @@ XML is supported for importing via zabbix web interface.
 JSON is required for future import via upload.js or for other needs.
 
 Uploading template:
-|||||placeholder|||||
+node upload.js --file="file to upload" --format="xml|json" --hostname=Your zabbix hostname --username=Zabbix admin username --password=Zabbix admin password
+Expected result: imported template from xml/json file. Default rules: create missing, update existing, delete missing from template.
 
 
 TODO:
