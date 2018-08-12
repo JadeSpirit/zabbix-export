@@ -17,3 +17,5 @@ Expected result: imported template from xml/json file. Default rules: create mis
 
 TODO:
 Create methods and index.js
+
+Contributions and propositions are welcome.
