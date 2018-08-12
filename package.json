@@ -6,7 +6,6 @@
   "author": "Vasilii Nikitchenko",
   "license": "MIT",
   "dependencies": {
-    "jstoxml": "^1.4.3",
     "yargs": "^12.0.1",
     "zabbix": "^0.1.1"
   }
