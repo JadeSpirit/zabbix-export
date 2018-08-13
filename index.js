@@ -1,5 +1,5 @@
 const argv = require('yargs')
-  .usage('Usage: $0 --mode=(GetApi, GetTemplate, SendTemplate) --template="(file name or template name on Zabbix, depends on mode)" --hostname= --username= --password= --format=("xml", "json")')
+  .usage('Usage: $0 --mode=(GetApi, GetTemplate, SendTemplate) --hostname= --username= --password= --template="(file name or template name on Zabbix)" --format=("xml", "json")')
   .demandOption(['mode','hostname','username','password'])
   .argv;
 const Zabbix =require('zabbix');
