@@ -1,21 +1,32 @@
 # zabbix-export
 
-Script for exporting and importing zabbix items.
+Universal script for exporting and importing zabbix items.
+Based on https://github.com/pawmint/zabbix.js
 
 Usage.
-Downloading template:
-node download.js --hostname=Your zabbix hostname --username=Zabbix admin username --password=Zabbix admin password --template="Template to download" --format="xml|json"
-Expected result: exported template  in form of "template".xml or "template".json files in root folder.
+node index.js (options)
+Or download pre-compiled zabbix-export.exe and use it from windows console.
 
-XML is supported for importing via zabbix web interface.
-JSON is required for future import via upload.js or for other needs.
+--mode=(GetApi, GetTemplate, SendTemplate) - work mode selection. Mandatory.
+ >GetApi returns Zabbix api version
+ >GetTemplate saves selected template to XML or JSON file in working dir
+ >SendTemplate uploads template file to zabbix server
 
-Uploading template:
-node upload.js --file="file to upload" --format="xml|json" --hostname=Your zabbix hostname --username=Zabbix admin username --password=Zabbix admin password
-Expected result: imported template from xml/json file. Default rules: create missing, update existing, delete missing from template.
+--hostname=(zabbix host name or ip address). Mandatory.
 
+--username=(zabbix username). Must have admin rights to do upload and download. Mandatory.
 
-TODO:
-Create methods and index.js
+--password=(zabbix password). Mandatory.
+
+--template=(template name on server or file name). Mandatory for upload and download. Must use file name for download and template name for upload.
+
+--format=(JSON or XML). Mandatory for upload and download. XML is ready for uploading via web interface.
+
+Other modes will be added later:
+ >export parsed template to XLS or CSV for analisys
+ >batch export and import
+ >uploading and downloading items and other elements
+ >etc
+
 
 Contributions and propositions are welcome.
