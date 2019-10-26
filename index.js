@@ -3,14 +3,13 @@ const argv = require('yargs')
     .demandOption(['mode', 'zbxhost', 'zbxuser', 'zbxpass'])
     .argv;
 const Zabbix = require('zabbix');
-const Zabbix_promise = require("zabbix-promise");
 const fs = require('fs');
 const Mode = argv.mode;
-let apiversion = undefined;
 const template = argv.template;
 const format = argv.format;
 const hostpath = argv.hostpath;
-const zabbix = new Zabbix(`http://${argv.zbxhost}/api_jsonrpc.php`, argv.zbxhost, argv.zbxpass);
+const zabbix = new Zabbix(`http://${argv.zbxhost}/api_jsonrpc.php`, argv.zbxuser, argv.zbxpass);
+
 console.log(`Auth string is ${JSON.stringify(zabbix)}`);
 if (Mode == "GetApi") {
     zabbix.getApiVersion((err, resp, {
@@ -23,13 +22,13 @@ if (Mode == "GetApi") {
         if (err) {
             console.log(err);
         }
-    })
+    });
 }
 if (Mode == "GetTemplate") {
-    if (format == undefined) {
+    if (format === undefined) {
         console.log("Format is mandatory for export and import");
         process.exit(-1);
-    };
+    }
     let gettemplate = {
         "output": "extend",
         "filter": {
@@ -75,9 +74,9 @@ if (Mode == "GetTemplate") {
                     });
                 }
                 if (err) {
-                    console.log(err)
+                    console.log(err);
                 }
-            })
+            });
         }
         if (err) {
             console.log(err);
@@ -85,10 +84,10 @@ if (Mode == "GetTemplate") {
     });
 }
 if (Mode == "SendTemplate") {
-    if (format == undefined) {
+    if (format === undefined) {
         console.log("Format is mandatory for export and import");
         process.exit(-1);
-    };
+    }
     zabbix.login((err, resp, body) => {
         if (!err) {
             console.log(`Authenticated! AuthID is: ${zabbix.authid}`);
@@ -118,9 +117,9 @@ if (Mode == "SendTemplate") {
                     result
                 }) => {
                     if (!err) {
-                        if (result == true) {
-                            console.log("Imported sucessfully")
-                        };
+                        if (result === true) {
+                            console.log("Imported sucessfully");
+                        }
                     }
                     if (err) {
                         console.log(err);
@@ -134,49 +133,65 @@ if (Mode == "SendTemplate") {
     });
 }
 if (Mode == "CreateHost") {
-    (async() => {
-        const zabbixp = new Zabbix_promise(`http://${argv.zbxhost}/api_jsonrpc.php`, argv.zbxhost, argv.zbxpass);
-        await zabbixp.login();
-        const host = JSON.parse(fs.readFileSync(hostpath, 'utf8'));
-        for (let index = 0; index < hosts; index++) {
-            const host = host[index];
-            try {
-                await zabbixp.request("host.create", {
-                    host: host.ip,
-                    name: host.host,
-                    interfaces: [
-                        {
-                            type: 1,
-                            main: 1,
-                            useip: 1,
-                            ip: host.ip,
-                            dns: host.host,
-                            port: "10050"
-          },
-                        {
-                            type: 2,
-                            main: 1,
-                            useip: 1,
-                            ip: host.ip,
-                            dns: host.host,
-                            port: "161"
-          },
+  if (hostpath === undefined) {
+      console.log("Path to hostfile is mandatory for export and import");
+      process.exit(-1);
+  }
+  zabbix.login((err, resp, body) => {
+      if (!err) {
+          console.log(`Authenticated! AuthID is: ${zabbix.authid}`);
+          const hosts = JSON.parse(fs.readFileSync(hostpath, 'utf8'));
+          console.log(hosts);
+          for (let index = 0; index < hosts.length; index++) {
+            const host = hosts[index];
+            console.log(host);
+            let CreateHost = {
+                 host: host.ip,
+                 name: host.host,
+                 interfaces: [
+                   {
+                     type: 1,
+                     main: 1,
+                     useip: 1,
+                     ip: host.ip,
+                     dns: host.host,
+                     port: "10050"
+                   },
+                   {
+                     type: 2,
+                     main: 1,
+                     useip: 1,
+                     ip: host.ip,
+                     dns: host.host,
+                     port: "161"
+                   },
 
-        ],
-                    "inventory_mode": 0,
-                    "inventory": {
-                        "asset_tag": host.host,
-                    }
-                    groups: [
-                        {
-                            groupid: host.groups
-          }
-        ]
-                });
-            } catch (error) {}
-        }
-        if (error) {
+                 ],
+
+                 ipmi_privilege: 3,
+                 groups: [
+                   {
+                     groupid: host.group
+                   }
+                 ]
+               };
+               console.log("Sending host");
+               zabbix.call("host.create", CreateHost, (err, resp, {
+                   result
+               }) => {
+                   if (!err) {
+                       if (result === true) {
+                           console.log("Host created sucessfully");
+                       }
+                   }
+                   if (err) {
+                       console.log(err);
+                   }
+            });
+        };
+        if (err) {
             console.log(err);
         }
-    })();
+    };
+});
 }
