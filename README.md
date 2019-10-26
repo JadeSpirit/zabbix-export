@@ -12,7 +12,7 @@ node index.js (options).
 Or download pre-compiled zabbix-export.exe and use it from windows console.
 
 
---mode=(GetApi, GetTemplate, SendTemplate) - work mode selection. Mandatory.
+--mode=(GetApi, GetTemplate, SendTemplate, CreateHost) - work mode selection. Mandatory.
 
  -GetApi returns Zabbix api version.
 
@@ -26,6 +26,7 @@ Or download pre-compiled zabbix-export.exe and use it from windows console.
 --zbxhost=(zabbix host name or ip address). Mandatory.
 
 
+
 --zbxuser=(zabbix username). Must have admin rights to do upload and download. Mandatory.
 
 
@@ -37,7 +38,9 @@ Or download pre-compiled zabbix-export.exe and use it from windows console.
 
 --format=(JSON or XML). Mandatory for upload and download. XML is ready for uploading via web interface.
 
+
 --hostpath=(path_to_hosts_file). Mandatory for creating hosts. File must be json, example attached.
+
 
 Other modes will be added later:
 
@@ -46,7 +49,11 @@ Other modes will be added later:
  -batch export and import.
 
  -uploading and downloading items and other elements.
-
+ 
+ -batch export and import.
+ 
+ -uploading and downloading items and other elements.
+ 
  -etc.
 
 
