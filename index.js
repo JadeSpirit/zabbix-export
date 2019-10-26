@@ -1,10 +1,11 @@
 const argv = require('yargs')
-    .usage('Usage: $0 --mode=(GetApi, GetTemplate, SendTemplate, HostCreate) --zbxhost= --zbxuser= --zbxpass= --template="(file name or template name on Zabbix)" --format=("xml", "json") --hostpath="(path to file with host data)"')
+    .usage('Usage: $0 --mode=(GetApi, GetTemplate, SendTemplate, HostCreate) --zbxhost= --zbxuser= --zbxpass= --template="(file name or template name on Zabbix)" --format=("xml", "json") --hostpath="(path to file with host data)" --groupid=(number)')
     .demandOption(['mode', 'zbxhost', 'zbxuser', 'zbxpass'])
     .argv;
 const Zabbix = require('zabbix');
 const fs = require('fs');
 const Mode = argv.mode;
+const groupid = argv.groupid;
 const template = argv.template;
 const format = argv.format;
 const hostpath = argv.hostpath;
@@ -144,6 +145,7 @@ if (Mode == "CreateHost") {
           console.log(hosts);
           for (let index = 0; index < hosts.length; index++) {
             const host = hosts[index];
+            if (groupid === undefined) { groupid = host.group;}
             console.log(host);
             let CreateHost = {
                  host: host.ip,
@@ -171,7 +173,7 @@ if (Mode == "CreateHost") {
                  ipmi_privilege: 3,
                  groups: [
                    {
-                     groupid: host.group
+                     groupid: groupid
                    }
                  ]
                };
