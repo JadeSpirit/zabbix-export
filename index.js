@@ -1,5 +1,5 @@
 const argv = require('yargs')
-  .usage('Usage: $0 --mode=(GetApi, GetTemplate, SendTemplate, HostCreate) --zbxhost= --zbxuser= --zbxpass= --template="(file name or template name on Zabbix)" --format=("xml", "json") --hostdata="(path to file with host data)"')
+  .usage('Usage: $0 --mode=(GetApi, GetTemplate, SendTemplate, HostCreate) --zbxhost= --zbxuser= --zbxpass= --template="(file name or template name on Zabbix)" --format=("xml", "json") --hostpath="(path to file with host data)"')
   .demandOption(['mode','zbxhost','zbxuser','zbxpass'])
   .argv;
 const Zabbix =require('zabbix');
@@ -10,12 +10,12 @@ const Mode = argv.mode;
 let apiversion = undefined;
 const template = argv.template;
 const format = argv.format;
-const hostdata = argv.hostdata;
+const hostpath = argv.hostpath;
 
 const zabbix = new Zabbix(`http://${argv.zbxhost}/api_jsonrpc.php`, argv.zbxhost, argv.zbxpass);
 console.log(`Auth string is ${JSON.stringify(zabbix)}`);
 
-if (Mode == "GetApi") {
+if (Mode == "GetApi") {var index = require('./index')
     zabbix.getApiVersion((err, resp, {result}) => {
   if (!err) {
       console.log(`Zabbix api version is ${result}`);
@@ -134,7 +134,7 @@ if (Mode == "CreateHost") {
   (async () => {
   const zabbixp = new Zabbix_promise(`http://${argv.zbxhost}/api_jsonrpc.php`, argv.zbxhost, argv.zbxpass);
   await zabbixp.login();
-  const host = JSON.parse(fs.readFileSync('file', 'utf8'));
+  const host = JSON.parse(fs.readFileSync(hostpath, 'utf8'));
   for (let index = 0; index < hosts; index++) {
     const host = host[index];
     try {
