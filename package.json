@@ -1,6 +1,6 @@
 {
   "name": "zabbix-export",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Export and import zabbix templates via zabbix api",
   "main": "index.js",
   "author": "Vasilii Nikitchenko",
