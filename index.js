@@ -6,6 +6,7 @@ const Zabbix =require('zabbix');
 const Zabbix_promise =require("zabbix-promise");
 const fs = require('fs');
 
+
 const Mode = argv.mode;
 let apiversion = undefined;
 const template = argv.template;
@@ -15,7 +16,7 @@ const hostpath = argv.hostpath;
 const zabbix = new Zabbix(`http://${argv.zbxhost}/api_jsonrpc.php`, argv.zbxhost, argv.zbxpass);
 console.log(`Auth string is ${JSON.stringify(zabbix)}`);
 
-if (Mode == "GetApi") {var index = require('./index')
+if (Mode == "GetApi") {
     zabbix.getApiVersion((err, resp, {result}) => {
   if (!err) {
       console.log(`Zabbix api version is ${result}`);
