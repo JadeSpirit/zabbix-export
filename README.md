@@ -23,24 +23,21 @@ Or download pre-compiled zabbix-export.exe and use it from windows console.
  -CreateHost creates hosts from file, for example hosts.json (batch)
 
 
---zbxhost=(zabbix host name or ip address). Mandatory.
 
+--zbxhost=(zabbix host name or ip address). Mandatory.
 
 
 --zbxuser=(zabbix username). Must have admin rights to do upload and download. Mandatory.
 
-
 --zbxpass=(zabbix password). Mandatory.
-
 
 --template=(template name on server or file name). Mandatory for upload and download. Must use file name for download and template name for upload.
 
-
 --format=(JSON or XML). Mandatory for upload and download. XML is ready for uploading via web interface.
-
 
 --hostpath=(path_to_hosts_file). Mandatory for creating hosts. File must be json, example attached.
 
+--groupid=(number of group for new hosts). Mandatory for creating hosts.
 
 Other modes will be added later:
 
@@ -49,11 +46,11 @@ Other modes will be added later:
  -batch export and import.
 
  -uploading and downloading items and other elements.
- 
+
  -batch export and import.
- 
+
  -uploading and downloading items and other elements.
- 
+
  -etc.
 
 
